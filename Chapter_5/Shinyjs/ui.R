@@ -5,20 +5,35 @@
 
 library(leaflet)
 library(DT)
+library(shinyjs)
 
 fluidPage(
+  
+  # we need to define the CSS in the head of the HTML using tabs$head:
+  tags$head(
+    tags$style(HTML(".redText {
+                    color: red;
+                    }"
+    ))
+  ),
+  
+  
+  # we need to add useShinyjs() anywhere within fluidPage() in ui.R
+  useShinyjs(),
   
   titlePanel("Gapminder"),
   
   sidebarLayout(
     sidebarPanel(
-      sliderInput(inputId = "year",
-                  label = "Years included",
-                  min = 1952,
-                  max = 2007,
-                  value = c(1952, 2007),
-                  sep = "",
-                  step = 5
+      div(id = "yearPanel",
+          sliderInput(inputId = "year",
+                      label = "Years included",
+                      min = 1952,
+                      max = 2007,
+                      value = c(1952, 2007),
+                      sep = "",
+                      step = 5
+          )
       ),
       
       # checkboxInput("linear", label = "Add trend line?", value = FALSE),
@@ -34,22 +49,20 @@ fluidPage(
       # Modal (elements from Bootstrap, pop-up messages)
       actionButton("showModal", "Launch loyalty test"),
       
-      # adding some Java-Script magic
-      tags$input(type = "button",
-                 id = "append",
-                 value = "Add current input values",
-                 onClick= "buttonClick()"),
-      includeHTML("appendText.js")
+      # we add a button
+      checkboxInput("redText", "Red text?"),
       
+      # we add a button for the user to reset everything
+      actionButton("reset", "Reset year")
       
     ),
     
     mainPanel(
       tabsetPanel(id = "theTabs",
-        tabPanel("Summary", textOutput("summary"),
-                 p(id = "selection", "Values")),
-        tabPanel("Trend", plotOutput("trend"),
-                 value = "trend"),
+        tabPanel("Summary", value = "text", div(id = "theText",
+                                                textOutput("summary"))),
+        tabPanel("Trend", value = "graph", plotOutput("trend"),
+                 p(id = "controlList")),
         tabPanel("Map", leafletOutput("map"), 
                  p("Map data is from the most recent year in the selected range; 
                      radius of circles is scaled to life expectancy"),
