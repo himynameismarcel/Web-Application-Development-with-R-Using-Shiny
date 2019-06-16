@@ -5,6 +5,7 @@
 ## This is a small test.
 
 library(shinydashboard)
+library(shinydashboard)
 library(leaflet)
 
 ## HEADER
