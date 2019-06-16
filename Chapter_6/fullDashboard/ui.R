@@ -2,9 +2,7 @@
 ## 10.06.2019
 ## Shiny Application, Full Application
 ## Following the book: Web Application with Shiny R (Breeley, 2018)
-## This is a small test.
 
-library(shinydashboard)
 library(shinydashboard)
 library(leaflet)
 
